@@ -20,10 +20,6 @@ try:
     # convert Google response to JSON
     json_result = search_res.json()
 
-    # print(json_result['routes'][0]['bounds']['northeast']['lat'], json_result['routes'][0]['bounds']['northeast']['lng'])
-    # print(json_result['routes'][0]['bounds']['southwest']['lat'], json_result['routes'][0]['bounds']['southwest']['lng'])
-    # pprint.pprint(json_result)
-
 except:
     pass
 
@@ -46,8 +42,6 @@ def get_midpoint(half_distance: int, steps: [(int, str, str)]) -> (str, str):
         cur_step += 1
 
     left_over_distance = half_distance - cur_distance
-##    print(cur_distance, half_distance)
-##    print('left over distance', left_over_distance)
 
     # lat, lng
     startpos = (steps[cur_step][1]['lat'],steps[cur_step][1]['lng'])
@@ -55,11 +49,13 @@ def get_midpoint(half_distance: int, steps: [(int, str, str)]) -> (str, str):
     lat_length = endpos[0] - startpos[0]
     lng_length = endpos[1] - startpos[1]
 
-##    print(startpos, endpos)
 
     # get angle in radians
     angle = math.atan(lng_length/lat_length)
 
+    if (endpos[0] > startpos[0] and endpos[1] > startpos[1]) or \
+       (endpos[0] < startpos[0] and endpos[1] > startpos[1]):
+        return (startpos[0]+left_over_distance*math.cos(angle)/111000, startpos[1]+left_over_distance*math.sin(angle)/111000)
     return (startpos[0]-left_over_distance*math.cos(angle)/111000, startpos[1]-left_over_distance*math.sin(angle)/111000)
 
 
