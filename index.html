@@ -1,0 +1,173 @@
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      function getType(score){
+        var type = 'red';
+        if(score > 7.0){
+          type = 'green';
+        }
+        else if(score > 5.0){
+          type = 'yellow';
+        }
+        return type;
+      }
+
+      function initMap() {
+        var m = {{middle}};
+        var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: {'lat': m[0], 'lng': m[1]},
+        styles: [
+            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+            {
+              featureType: 'administrative.locality',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'geometry',
+              stylers: [{color: '#263c3f'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#6b9a76'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry',
+              stylers: [{color: '#38414e'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#212a37'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#9ca5b3'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry',
+              stylers: [{color: '#746855'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#1f2835'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#f3d19c'}]
+            },
+            {
+              featureType: 'transit',
+              elementType: 'geometry',
+              stylers: [{color: '#2f3948'}]
+            },
+            {
+              featureType: 'transit.station',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'geometry',
+              stylers: [{color: '#17263c'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#515c6d'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.stroke',
+              stylers: [{color: '#17263c'}]
+            }
+          ]
+        });
+
+        var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+        var icons = {
+          green: {
+            icon: 'https://i.imgur.com/ix6NsjB.png'
+          },
+          yellow: {
+            icon: 'https://i.imgur.com/xvMMjbG.png'
+          },
+          red: {
+            icon: 'https://i.imgur.com/AbX7MZJ.png'
+          }
+        };
+
+
+        var coords = {{places}};
+        var locations = [];
+        for (i = 0; i < coords.length; i++) {
+          locations.push({
+            position: new google.maps.LatLng(coords[i][0], coords[i][1]),
+            type: getType({{details}}[i][2])
+          });
+        }
+
+        locations.forEach(function(location) {
+          var marker = new google.maps.Marker({
+            position: location.position,
+            icon: icons[location.type].icon,
+            map: map
+          });
+        });
+
+        var locationA = new google.maps.LatLng({{loc_a}}[0], {{loc_a}}[1]);
+        var locationB = new google.maps.LatLng({{loc_b}}[0], {{loc_b}}[1]);
+        var locationM = new google.maps.LatLng(m[0], m[1]);
+
+        var markerA = new google.maps.Marker({
+          position: locationA,
+          map: map
+        });
+        var markerB = new google.maps.Marker({
+          position: locationB,
+          map: map
+        });
+        var markerM = new google.maps.Marker({
+          position: locationM,
+          map: map
+        });
+      };
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_j0Y_vKABSggxFNwCIPmfDNEaKKZ7tHg&callback=initMap">
+    </script>
+  </body>
+</html>
